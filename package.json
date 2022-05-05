@@ -1,0 +1,84 @@
+{
+  "name": "@trs/expression",
+  "version": "1.0.0",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky install",
+    "build": "run-p build:cjs build:esm",
+    "prebuild:cjs": "rimraf dist/cjs",
+    "prebuild:esm": "rimraf dist/esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json && tsc-alias -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json && tsc-alias -p tsconfig.esm.json",
+    "postbuild:cjs": "touch dist/cjs/package.json && echo '{ \"type\": \"commonjs\" }' > dist/cjs/package.json",
+    "postbuild:esm": "touch dist/esm/package.json && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
+    "lint": "xo src/**/*.ts --fix",
+    "lint:check": "xo src/**/*.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ohm-js": "^16.3.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.177",
+    "@swc/jest": "^0.2.20",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.22",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.4.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "tsc-alias": "^1.6.7",
+    "typescript": "^4.6.2",
+    "xo": "^0.48.0"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(t|j)s?$": "@swc/jest"
+    },
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "testMatch": [
+      "<rootDir>/src/**/*.test.ts"
+    ],
+    "testEnvironment": "node"
+  },
+  "xo": {
+    "prettier": true,
+    "env": "node",
+    "rules": {
+      "@typescript-eslint/naming-convention": "off"
+    }
+  },
+  "lint-staged": {
+    "*": "xo --fix"
+  },
+  "volta": {
+    "node": "16.14.2",
+    "yarn": "1.22.18"
+  }
+}
