@@ -16,6 +16,5 @@
     "targets": {
       "node": "16"
     }
-  },
-  "sourceMaps": true
+  }
 }
