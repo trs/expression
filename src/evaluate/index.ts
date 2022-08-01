@@ -1,6 +1,5 @@
 import {
 	validateBinaryExpression,
-	validateIdentifier,
 	validateLiteral,
 	validateUnaryExpression,
 } from './validate.js';
@@ -8,30 +7,25 @@ import {binary, unary} from './operators/index.js';
 import {createLiteral, parseLiteralValue} from '@/utils/index.js';
 import type {
 	Expression,
-	Identifier,
 	Literal,
 	LiteralValue,
-	Variables,
 } from '@/types.js';
 
 import {
 	isBinaryExpression,
-	isIdentifier,
 	isLiteral,
 	isUnaryExpression,
 } from '@/guards.js';
 
 export function evaluate(
-	expression: Expression,
-	variables?: Variables,
+	expression: Expression
 ): LiteralValue {
-	const result = evaluateTree(expression, variables);
+	const result = evaluateTree(expression);
 	return parseLiteralValue(result);
 }
 
 export const evaluateTree = (
-	expression: Expression | Identifier | Literal,
-	variables?: Variables,
+	expression: Expression | Literal
 ): Literal => {
 	if (isLiteral(expression)) {
 		if (!validateLiteral(expression)) throw new Error('Invalid literal');
@@ -39,19 +33,11 @@ export const evaluateTree = (
 		return expression;
 	}
 
-	if (isIdentifier(expression)) {
-		if (!validateIdentifier(expression, variables))
-			throw new Error('Invalid identifier');
-
-		const value = variables[expression.name];
-		return createLiteral(value);
-	}
-
 	if (isUnaryExpression(expression)) {
-		if (!validateUnaryExpression(expression, variables))
+		if (!validateUnaryExpression(expression))
 			throw new Error('Invalid unary expression');
 
-		const argument = evaluateTree(expression.argument, variables);
+		const argument = evaluateTree(expression.argument);
 
 		const handler = unary.getOperatorHandler(expression.operator);
 		if (typeof handler !== 'function')
@@ -61,11 +47,11 @@ export const evaluateTree = (
 	}
 
 	if (isBinaryExpression(expression)) {
-		if (!validateBinaryExpression(expression, variables))
+		if (!validateBinaryExpression(expression))
 			throw new Error('Invalid binary expression');
 
-		const leftEval = evaluateTree(expression.left, variables);
-		const rightEval = evaluateTree(expression.right, variables);
+		const leftEval = evaluateTree(expression.left);
+		const rightEval = evaluateTree(expression.right);
 
 		const handler = binary.getOperatorHandler(expression.operator);
 		if (typeof handler !== 'function')

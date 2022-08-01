@@ -1,5 +1,5 @@
 import { BinaryOperator, LiteralType, UnaryExpression, UnaryOperator } from "./types.js";
-import type { BinaryExpression, Identifier, Literal } from "./types.js";
+import type { BinaryExpression, Literal } from "./types.js";
 
 export const isUnaryExpression = (val: unknown): val is UnaryExpression =>
   val != null && typeof val === 'object'
@@ -11,9 +11,6 @@ export const isBinaryExpression = (val: unknown): val is BinaryExpression =>
 
 export const isLiteral = (val: unknown): val is Literal =>
   val != null && typeof val === 'object' && ['kind', 'value'].every((prop) => Object.prototype.hasOwnProperty.call(val, prop));
-
-export const isIdentifier = (val: unknown): val is Identifier =>
-  val != null && typeof val === 'object' && ['name'].every((prop) => Object.prototype.hasOwnProperty.call(val, prop));
 
 export const isLiteralType = (val: unknown): val is LiteralType =>
   val != null && typeof val === 'string' && LiteralType.some((type) => type === val);

@@ -1,18 +1,10 @@
 import type {
 	BinaryExpression,
 	UnaryExpression,
-	Identifier,
 	Literal,
 } from '@/types.js';
 import {escapeStringQuotes} from '@/utils/index.js';
 import {isLiteralType} from '@/guards.js';
-
-export function createIdentifier(name: string): Identifier {
-	return {
-		type: 'Identifier',
-		name,
-	};
-}
 
 export function createBinaryExpression(
 	left: BinaryExpression['left'],

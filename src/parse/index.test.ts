@@ -8,7 +8,6 @@ import {
 } from '@/types.js';
 import {
 	createLiteral,
-	createIdentifier,
 	createBinaryExpression,
 	createUnaryExpression,
 } from '@/utils/index.js';
@@ -17,11 +16,11 @@ describe('parse', () => {
 	it.each(ArithmeticBinaryOperator.map((op) => [op]))(
 		'arithmetic binary expression',
 		(op) => {
-			const string_ = `1 ${op} {var_name2}`;
+			const string_ = `1 ${op} 2`;
 
 			const exp = createBinaryExpression(
 				createLiteral(1),
-				createIdentifier('var_name2'),
+				createLiteral(2),
 				op,
 			);
 
@@ -32,10 +31,10 @@ describe('parse', () => {
 	it.each(ComparisonOperator.map((op) => [op]))(
 		'comparison binary expression',
 		(op) => {
-			const string_ = `{_var3} ${op} "1string_-"`;
+			const string_ = `1 ${op} "1string_-"`;
 
 			const exp = createBinaryExpression(
-				createIdentifier('_var3'),
+				createLiteral(1),
 				createLiteral('1string_-'),
 				op,
 			);
@@ -47,10 +46,10 @@ describe('parse', () => {
 	it.each(LogicalBinaryOperator.map((op) => [op]))(
 		'logical binary expression',
 		(op) => {
-			const string_ = `{_var3} ${op} "1string_-"`;
+			const string_ = `"x" ${op} "1string_-"`;
 
 			const exp = createBinaryExpression(
-				createIdentifier('_var3'),
+				createLiteral('x'),
 				createLiteral('1string_-'),
 				op,
 			);

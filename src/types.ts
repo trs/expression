@@ -1,4 +1,4 @@
-export type Expression = BinaryExpression | UnaryExpression | Identifier | Literal;
+export type Expression = BinaryExpression | UnaryExpression | Literal;
 
 export interface BinaryExpression {
   type?: 'BinaryExpression';
@@ -66,11 +66,6 @@ export const UnaryOperator = [
 ] as const;
 export type UnaryOperator = typeof UnaryOperator[number];
 
-export interface Identifier {
-  type?: "Identifier",
-  name: string;
-}
-
 export const LiteralType = [
   'string',
   'boolean',
@@ -87,8 +82,6 @@ export interface Literal {
 }
 
 export type LiteralValue = string | number | boolean | null;
-
-export type Variables = Record<string, LiteralValue>;
 
 export type BinaryOperatorEvaluator = (left: Literal, right: Literal) => Literal;
 

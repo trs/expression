@@ -42,7 +42,6 @@ Grammar {
     | boolean
     | number
     | string
-    | identifier
 
   boolean =
   	| "true"
@@ -51,17 +50,6 @@ Grammar {
   number =
     | digit* "." digit+      -- fract
     | digit+                 -- whole
-
-  identifier
-    = "{" #(identifierFirstCharacter identifierCharacter*) "}"
-
-  identifierFirstCharacter =
-    | letter
-    | "_"
-
-  identifierCharacter =
-    | alnum
-    | "_"
 
   string =
     | "\"" doubleStringCharacters? "\""

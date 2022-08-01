@@ -1,36 +1,23 @@
 import {evaluate} from '@/evaluate/index.js';
-import {Expression, Variables} from '@/types.js';
+import {Expression} from '@/types.js';
+import { createLiteral } from '@/utils';
 
 describe('evaluate', () => {
 	it('simple binary expression', () => {
 		const exp: Expression = {
-			left: {
-				kind: 'number',
-				value: '1',
-			},
-			right: {
-				name: 'test',
-			},
+			left: createLiteral(1),
+			right: createLiteral(2),
 			operator: '+',
 		};
 
-		const vars: Variables = {
-			test: 2,
-		};
-
-		expect(evaluate(exp, vars)).toBe(3);
+		expect(evaluate(exp)).toBe(3);
 	});
 
 	it('advanced binary expression', () => {
 		const exp: Expression = {
 			left: {
-				left: {
-					kind: 'number',
-					value: '4',
-				},
-				right: {
-					name: 'num1',
-				},
+				left: createLiteral(4),
+				right: createLiteral(2),
 				operator: '+',
 			},
 			right: {
@@ -47,34 +34,21 @@ describe('evaluate', () => {
 			operator: '*',
 		};
 
-		const vars: Variables = {
-			num1: 2,
-		};
-
 		// (4 + 2) * (8 - 4)
 		// 6 * 4
 		// 24
 
-		expect(evaluate(exp, vars)).toBe(24);
+		expect(evaluate(exp)).toBe(24);
 	});
 
 	it('simple logical expression', () => {
 		const exp: Expression = {
-			left: {
-				kind: 'number',
-				value: '1',
-			},
-			right: {
-				name: 'test',
-			},
+			left: createLiteral(1),
+			right: createLiteral(2),
 			operator: '==',
 		};
 
-		const vars: Variables = {
-			test: 2,
-		};
-
-		expect(evaluate(exp, vars)).toBe(false);
+		expect(evaluate(exp)).toBe(false);
 	});
 
 	it('advanced logical expression', () => {
@@ -95,18 +69,12 @@ describe('evaluate', () => {
 					kind: 'boolean',
 					value: 'true',
 				},
-				right: {
-					name: 'test',
-				},
+				right: createLiteral(false),
 				operator: '||',
 			},
 			operator: '&&',
 		};
 
-		const vars: Variables = {
-			test: false,
-		};
-
-		expect(evaluate(exp, vars)).toBe(true);
+		expect(evaluate(exp)).toBe(true);
 	});
 });

@@ -5,7 +5,6 @@ import type {
 	BinaryExpression,
 	UnaryExpression,
 	Literal,
-	Identifier,
 	BinaryOperator,
 	UnaryOperator,
 } from '@/types.js';
@@ -13,7 +12,6 @@ import type {
 type BinaryExpressionLike = Record<keyof BinaryExpression, unknown>;
 type UnaryExpressionLike = Record<keyof UnaryExpression, unknown>;
 type LiteralLike = Record<keyof Literal, unknown>;
-type IdentifierLike = Record<keyof Identifier, unknown>;
 
 const asBinaryExpression = (
 	operator: BinaryOperator,
@@ -48,13 +46,6 @@ const asStringLiteralExpression =
 		value: characters.sourceString,
 	});
 
-const asIdentifierExpression =
-	() =>
-	(_: unknown, first: Node, remaining: Node, __: unknown): IdentifierLike => ({
-		type: 'Identifier',
-		name: first.sourceString + remaining.sourceString,
-	});
-
 export const astMapping = {
 	LogicalExpression_and: asBinaryExpression('&&'),
 	LogicalExpression_or: asBinaryExpression('||'),
@@ -78,7 +69,6 @@ export const astMapping = {
 	number: asLiteralExpression('number'),
 	boolean: asLiteralExpression('boolean'),
 	string: asStringLiteralExpression(),
-	identifier: asIdentifierExpression(),
 };
 
 export const toAST = (match: MatchResult) =>
