@@ -1,0 +1,33 @@
+name: Publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://registry.npmjs.org'
+          node-version: '16.x'
+          cache: 'yarn'
+      - name: Install
+        run: yarn install
+      - name: Test
+        run: yarn test
+      - name: Build
+        run: yarn build
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          PUBLISH_VERSION=$(npm info . version)
+          LOCAL_VERSION=$(npm pkg get version | sed 's/"//g')
+          if [ ${LOCAL_VERSION} != ${PUBLISH_VERSION} ]; then
+            echo "Publishing ${LOCAL_VERSION}"
+            yarn publish --access public --new-version ${LOCAL_VERSION}
+          else
+            echo "Skipping publish"
+          fi
