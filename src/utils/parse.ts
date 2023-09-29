@@ -8,8 +8,12 @@ export function parseLiteralValue(value: Literal): LiteralValue {
 			return value.value === 'true';
 		case 'number':
 			return Number(value.value);
+		case 'object':
+			return value.value;
 		case 'null':
 			return null;
+		case 'undefined':
+			return undefined;
 		default:
 			throw new Error('Unsupported literal value');
 	}

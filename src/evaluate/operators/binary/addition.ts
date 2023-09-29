@@ -1,5 +1,5 @@
 import { createLiteral, parseLiteralValue } from '@/utils/index.js';
-import { isNumber, isString } from '@/guards.js';
+import { isString } from '@/guards.js';
 import type {BinaryOperatorEvaluator} from '@/types.js';
 
 export const addition: BinaryOperatorEvaluator = (left, right) => {
@@ -12,7 +12,7 @@ export const addition: BinaryOperatorEvaluator = (left, right) => {
 
   const value = (leftVal as any) + (rightVal as any);
 
-  if (isNaN(value)) throw new Error('Division resulted in an invalid result');
+  if (isNaN(value)) throw new Error('Addition resulted in an invalid result');
 
   return createLiteral(value);
 }

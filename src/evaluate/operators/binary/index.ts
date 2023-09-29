@@ -15,6 +15,7 @@ import { remainder } from "./remainder.js";
 import { exponent } from "./exponent.js";
 import { strictEquality } from "./strictEquality.js";
 import { strictInequality } from "./strictInequality.js";
+import { logicalNullishCoalescing } from "./logicalNullishCoalescing.js";
 
 export type OperatorMap = Record<BinaryOperator, BinaryOperatorEvaluator>;
 
@@ -23,6 +24,7 @@ const OPERATOR_HANDLERS: OperatorMap = {
   '**': exponent,
   '&&': logicalAnd,
   '||': logicalOr,
+  '??': logicalNullishCoalescing,
   '==': equality,
   '!=': inequality,
   '===': strictEquality,
@@ -34,7 +36,7 @@ const OPERATOR_HANDLERS: OperatorMap = {
   '*': multiplication,
   '+': addition,
   '-': subtraction,
-  '/': division
+  '/': division,
 };
 
 export const getOperatorHandler = (op: BinaryOperator) => OPERATOR_HANDLERS[op];
