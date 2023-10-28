@@ -1,4 +1,4 @@
-export type Expression = BinaryExpression | UnaryExpression | Literal;
+export type Expression = BinaryExpression | UnaryExpression | MemberExpression | Literal | Identifier;
 
 export interface BinaryExpression {
   type?: 'BinaryExpression';
@@ -13,6 +13,19 @@ export interface UnaryExpression {
   prefix: boolean;
   operator: UnaryOperator;
 }
+
+export interface MemberExpression {
+  type?: 'MemberExpression';
+  object: MemberExpression | Identifier;
+  member: Identifier | Literal;
+  dot: MemberExpressionDot
+}
+
+export const MemberExpressionDot = [
+  '.',
+  '?.'
+] as const;
+export type MemberExpressionDot = typeof MemberExpressionDot[number];
 
 export const ArithmeticBinaryOperator = [
   '+',
@@ -45,6 +58,7 @@ export type ComparisonOperator = typeof ComparisonOperator[number];
 export const LogicalBinaryOperator = [
   '||',
   '&&',
+  '??',
 ] as const;
 export type LogicalBinaryOperator = typeof LogicalBinaryOperator[number];
 
@@ -70,7 +84,9 @@ export const LiteralType = [
   'string',
   'boolean',
   'number',
-  'null'
+  'object',
+  'null',
+  'undefined'
 ] as const;
 
 export type LiteralType = typeof LiteralType[number];
@@ -81,8 +97,23 @@ export interface Literal {
   value: string;
 }
 
-export type LiteralValue = string | number | boolean | null;
+export type LiteralValue = string | number | boolean | null | ObjectValue | ArrayValue;
+
+export interface ObjectValue {
+    [x: string]: LiteralValue;
+}
+
+export interface ArrayValue extends Array<LiteralValue> { }
+
+export interface Identifier {
+  type?: "Identifier",
+  name: string;
+}
+
+export type Variables = Record<string, LiteralValue>;
 
 export type BinaryOperatorEvaluator = (left: Literal, right: Literal) => Literal;
 
 export type UnaryOperatorEvaluator = (value: Literal) => Literal;
+
+export type MemberDotChain = { object: Identifier | Literal, dot?: MemberExpression['dot'] };

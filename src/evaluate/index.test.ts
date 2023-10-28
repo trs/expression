@@ -1,6 +1,10 @@
 import {evaluate} from '@/evaluate/index.js';
 import {Expression} from '@/types.js';
-import { createLiteral } from '@/utils';
+import {
+	createBinaryExpression,
+	createIdentifier,
+	createLiteral,
+} from '@/utils.js';
 
 describe('evaluate', () => {
 	it('simple binary expression', () => {
@@ -11,6 +15,20 @@ describe('evaluate', () => {
 		};
 
 		expect(evaluate(exp)).toBe(3);
+	});
+
+	it('simple binary expression with variables', () => {
+		const exp: Expression = {
+			left: createBinaryExpression(
+				createIdentifier('x'),
+				createLiteral(1),
+				'??',
+			),
+			right: createLiteral(2),
+			operator: '+',
+		};
+
+		expect(evaluate(exp, {y: 1})).toBe(3);
 	});
 
 	it('advanced binary expression', () => {

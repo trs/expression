@@ -2,6 +2,9 @@ import type {
 	BinaryExpression,
 	UnaryExpression,
 	Literal,
+	Identifier,
+	MemberExpression,
+	LiteralValue,
 } from '@/types.js';
 import {escapeStringQuotes} from '@/utils/index.js';
 import {isLiteralType} from '@/guards.js';
@@ -32,16 +35,39 @@ export function createUnaryExpression(
 	};
 }
 
-export function createLiteral<
-	T extends boolean | number | string | undefined | undefined,
->(value: T): Literal {
-	const kind = value === null ? 'null' : typeof value;
+export function createLiteral<T extends LiteralValue>(value: T): Literal {
+	const kind =
+		value === null ? 'null' : value === undefined ? 'undefined' : typeof value;
 	if (!isLiteralType(kind)) throw new TypeError(`Expected literal value`);
 
 	return {
 		type: 'Literal',
 		kind,
 		value:
-			typeof value === 'string' ? escapeStringQuotes(value) : String(value),
+			typeof value === 'string'
+				? escapeStringQuotes(value)
+				: typeof value === 'object'
+				? JSON.stringify(value)
+				: String(value),
+	};
+}
+
+export function createIdentifier(name: string): Identifier {
+	return {
+		type: 'Identifier',
+		name,
+	};
+}
+
+export function createMemberExpression(
+	object: MemberExpression['object'],
+	member: MemberExpression['member'],
+	dot: MemberExpression['dot'],
+): MemberExpression {
+	return {
+		type: 'MemberExpression',
+		object,
+		member,
+		dot,
 	};
 }

@@ -7,6 +7,7 @@ Grammar {
   LogicalExpression =
     | ComparisonExpression "&&" LogicalExpression  -- and
     | ComparisonExpression "||" LogicalExpression  -- or
+    | ComparisonExpression "??" LogicalExpression  -- nullishCoalescing
     | ComparisonExpression
 
   ComparisonExpression =
@@ -35,6 +36,13 @@ Grammar {
     | "+" PrimaryExpression  -- plus
     | PrimaryExpression
 
+  MemberExpression =
+    | MemberExpression "." identifier -- access
+    | MemberExpression "?." identifier -- nullish
+    | MemberExpression "[" number "]" -- array
+    | MemberExpression "[" string "]" -- bracket
+    | identifier
+
   PrimaryExpression =
     | "(" Expression ")"  -- paren
     | "null"
@@ -42,6 +50,18 @@ Grammar {
     | boolean
     | number
     | string
+    | MemberExpression
+
+  identifier =
+    | #( identifierFirstCharacter identifierCharacter* )
+
+  identifierFirstCharacter =
+    | letter
+    | "_"
+
+  identifierCharacter =
+    | alnum
+    | "_"
 
   boolean =
   	| "true"

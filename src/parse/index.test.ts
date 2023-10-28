@@ -10,6 +10,8 @@ import {
 	createLiteral,
 	createBinaryExpression,
 	createUnaryExpression,
+	createIdentifier,
+	createMemberExpression,
 } from '@/utils/index.js';
 
 describe('parse', () => {
@@ -118,6 +120,46 @@ describe('parse', () => {
 		const exp = createUnaryExpression(
 			createBinaryExpression(createLiteral(1), createLiteral(2), '>'),
 			'!',
+		);
+
+		expect(parse(string_)).toEqual(exp);
+	});
+
+	it('supports variable identifiers', () => {
+		const string_ = `x1 + 1`;
+
+		const exp = createBinaryExpression(
+			createIdentifier('x1'),
+			createLiteral(1),
+			'+',
+		);
+
+		expect(parse(string_)).toEqual(exp);
+	});
+
+	it('supports variable member access (chaining)', () => {
+		const string_ = `x.y + 1`;
+
+		const exp = createBinaryExpression(
+			createMemberExpression(createIdentifier('x'), createIdentifier('y'), '.'),
+			createLiteral(1),
+			'+',
+		);
+
+		expect(parse(string_)).toEqual(exp);
+	});
+
+	it('supports variable member access (optional-chaining)', () => {
+		const string_ = `x?.y + 1`;
+
+		const exp = createBinaryExpression(
+			createMemberExpression(
+				createIdentifier('x'),
+				createIdentifier('y'),
+				'?.',
+			),
+			createLiteral(1),
+			'+',
 		);
 
 		expect(parse(string_)).toEqual(exp);
